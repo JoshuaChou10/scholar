@@ -6,6 +6,8 @@ export default function Home() {
   const [currentDay, setCurrentDay] = useState<number>(0)
   const [reminders, setReminders] = useState<string[]>([])
   const [reminderText, setReminderText] = useState<string>('')
+  const [courses, setCourses] = useState<string[]>([])
+  const [courseInputs, setCourseInputs] = useState<string[]>(['', '', '', ''])
 
   useEffect(() => {
     const today = new Date()
@@ -13,6 +15,11 @@ export default function Home() {
 
     const savedReminders = JSON.parse(localStorage.getItem('reminders') || '[]')
     setReminders(savedReminders)
+
+    const savedCourses = JSON.parse(localStorage.getItem('courses') || '[]')
+    if (savedCourses.length > 0) {
+      setCourses(savedCourses)
+    }
   }, [])
 
   const addReminder = () => {
@@ -22,11 +29,33 @@ export default function Home() {
     setReminderText('')
   }
 
-
   const deleteReminder = (index: number) => {
     const newReminders = reminders.filter((_, i) => i !== index)
     setReminders(newReminders)
     localStorage.setItem('reminders', JSON.stringify(newReminders))
+  }
+
+  const handleCourseInputChange = (index: number, value: string) => {
+    const newCourseInputs = [...courseInputs]
+    newCourseInputs[index] = value
+    setCourseInputs(newCourseInputs)
+  }
+
+  const setCoursesHandler = () => {
+    setCourses(courseInputs)
+    localStorage.setItem('courses', JSON.stringify(courseInputs))
+  }
+
+  const resetCourses = () => {
+    setCourses([])
+    localStorage.removeItem('courses')
+  }
+
+  const getOrderedCourses = () => {
+    if (currentDay === 2 && courses.length === 4) {
+      return [courses[1], courses[0], courses[3], courses[2]]
+    }
+    return courses
   }
 
   return (
@@ -38,7 +67,43 @@ export default function Home() {
         <h1 className="text-3xl text-center mb-4">School Manager</h1>
         <div className="text-center">
           <h2 className="text-2xl mb-4">Today is day {currentDay}</h2>
-          <h3 className="text-xl mb-4">Tomorrow is day {(currentDay === 1) ? 2 : 1}</h3>
+          {courses.length ? (
+            <div>
+              <ul className="list-none p-0">
+                {getOrderedCourses().map((course, index) => (
+                  <li key={index} className="bg-gray-100 p-2 mb-2 border border-gray-300 text-black">
+                    {course}
+                  </li>
+                ))}
+              </ul>
+              <button 
+                className="bg-red-500 text-white py-2 px-4 mb-4" 
+                onClick={resetCourses}
+              >
+                Reset Courses
+              </button>
+              <h3 className="text-xl mb-4">Tomorrow is day {(currentDay === 1) ? 2 : 1}</h3>
+            </div>
+          ) : (
+            <div>
+              <h2 className="text-xl mb-2">Set your courses (Order for Day 1)</h2>
+              {courseInputs.map((course, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  className="w-full p-2 border border-gray-300 mb-2 text-black"
+                  value={course}
+                  onChange={(e) => handleCourseInputChange(index, e.target.value)}
+                />
+              ))}
+              <button
+                className="bg-blue-500 text-white py-2 px-4 mb-4"
+                onClick={setCoursesHandler}
+              >
+                Set Courses
+              </button>
+            </div>
+          )}
         </div>
         <div>
           <h2 className="text-xl mb-2">Set a Reminder</h2>
