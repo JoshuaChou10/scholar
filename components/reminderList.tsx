@@ -27,7 +27,7 @@ export default function ReminderList({ reminders, deleteReminder }) {
               className="p-2 mb-2 flex justify-between items-center border-b border-blue-500/50 text-white bg-transparent shadow-lg shadow-blue-500/50"
             >
               <div className="flex-grow" onClick={() => toggleDescription(index)}>
-                {reminder.text} - {reminder.date}
+                {reminder.text} - In {getDaysUntil(reminder.date)} Days
               </div>
               <button
                 className="bg-red-500 text-white py-1 px-2"
@@ -38,6 +38,7 @@ export default function ReminderList({ reminders, deleteReminder }) {
               {visibleDescriptionIndex === index && (
                 <div className="text-gray-700 p-2">
                   {reminder.desc}
+                  {reminder.date}
                 </div>
               )}
             </li>

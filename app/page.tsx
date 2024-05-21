@@ -72,73 +72,91 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen bg-black-100 text-gray-800">
-      <Head>
-        <title>School Tracker</title>
-      </Head>
+    <div className="flex min-h-screen bg-black text-gray-800">
+        <Head>
+            <title>School Tracker</title>
+        </Head>
 
-      <aside className="w-1/4 bg-white p-4">
-        <WeatherDisplay />
-      </aside>
+        <aside className="w-1/4 bg-white p-4">
+            <WeatherDisplay />
+        </aside>
 
-      <main className="flex-1 p-4">
-        <h1 className="text-3xl text-white text-center mb-4">School Manager</h1>
+        <main className="flex-1 p-4">
+            <h1 className="text-3xl text-white text-center mb-4">School Manager</h1>
 
-        <div className="flex justify-between items-start space-x-4">
-          <div className="flex-1">
-            {/* Courses and reminders setup */}
-          </div>
-          <div className="w-1/2">
-            {/* Input for courses */}
-            <h2 className="text-xl text-white mb-2">Set your courses (Order for Day 1)</h2>
-            {courseInputs.map((course, index) => (
-              <input
-                key={index}
+            <div className="flex justify-between items-start space-x-4">
+                <div className="flex-1">
+                    <h2 className="text-2xl text-white mb-4">Today is day {currentDay}, {new Date().getFullYear()} {new Date().toLocaleString('default', { month: 'long' })} {new Date().getDate()}</h2>
+                    {courses.length ? (
+                        <div>
+                            <ul className="list-none p-0">
+                                {getOrderedCourses().map((course, index) => (
+                                    <li key={index} className="bg-gray-100 p-2 mb-2 border border-gray-300 text-black">
+                                        {course}
+                                    </li>
+                                ))}
+                            </ul>
+                            <button 
+                                className="bg-blue-500 text-white py-2 px-4 mb-4" 
+                                onClick={resetCourses}
+                            >
+                                Edit Courses
+                            </button>
+                            <h3 className="text-xl text-white mb-4">Tomorrow is day {(currentDay === 1) ? 2 : 1}</h3>
+                        </div>
+                    ) : (
+                        <div>
+                            <h2 className="text-xl text-white mb-2">Set your courses (Order for Day 1)</h2>
+                            {courseInputs.map((course, index) => (
+                                <input
+                                    key={index}
+                                    type="text"
+                                    className="w-1/2 p-2 border border-gray-300 mb-2 text-black"
+                                    value={course}
+                                    onChange={(e) => handleCourseInputChange(index, e.target.value)}
+                                />
+                            ))}
+                            <button
+                                className="bg-blue-500 text-white py-2 px-4"
+                                onClick={setCoursesHandler}
+                            >
+                                Set Courses
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <h2 className="text-xl text-white mb-2">Set a Reminder</h2>
+            <input
                 type="text"
-                className="w-1/2 p-2 border border-gray-300 mb-2"
-                value={course}
-                onChange={(e) => handleCourseInputChange(index, e.target.value)}
-              />
-            ))}
+                className="w-full p-2 border border-gray-300 mb-2 text-black"
+                placeholder="Reminder title"
+                value={reminderText}
+                onChange={(e) => setReminderText(e.target.value)}
+            />
+            <input
+                type="text"
+                className="w-full p-2 border border-gray-300 mb-2 text-black"
+                placeholder="Reminder Description"
+                value={reminderDesc}
+                onChange={(e) => setReminderDesc(e.target.value)}
+            />
+            <input
+                type="date"
+                className="w-full p-2 border border-gray-300 mb-2 text-black"
+                value={reminderDate}
+                onChange={(e) => setReminderDate(e.target.value)}
+            />
             <button
-              className="bg-blue-500 text-white py-2 px-4"
-              onClick={setCoursesHandler}
+                className="bg-blue-500 text-white py-2 px-4 mb-4"
+                onClick={addReminder}
             >
-              Set Courses
+                Add Reminder
             </button>
-            <h2 className="text-xl mb-2 text-white">Set a Reminder</h2>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 mb-2 text-black"
-            placeholder="Reminder title"
-            value={reminderText}
-            onChange={(e) => setReminderText(e.target.value)}
-          />
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 mb-2 text-black"
-            placeholder="Reminder Description"
-            value={reminderDesc}
-            onChange={(e) => setReminderDesc(e.target.value)}
-          />
-          <input
-            type="date"
-            className="w-full p-2 border border-gray-300 mb-2 text-black"
-            value={reminderDate}
-            onChange={(e) => setReminderDate(e.target.value)}
-          />
-          <button
-            className="bg-blue-500 text-white py-2 px-4 mb-4"
-            onClick={addReminder}
-          >
-            Add Reminder
-          </button>
-          </div>
-        </div>
 
-        <ReminderList reminders={reminders} deleteReminder={deleteReminder} />
-      </main>
+            <ReminderList reminders={reminders} deleteReminder={deleteReminder} />
+        </main>
     </div>
-  );
-}
-
+);
+                            }
