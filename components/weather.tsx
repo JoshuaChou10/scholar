@@ -18,8 +18,8 @@ export default function WeatherDisplay() {
                 latitude: 52.52,
                 longitude: 13.41,
                 hourly: ['temperature_2m', 'precipitation_probability', 'wind_speed_10m'],
-                start: '2024-05-20', 
-                end: '2024-05-20',
+                start: '2024-05-22', // Ensure this is a valid date for forecasts
+                end: '2024-05-22',
                 timezone: 'Europe/Berlin'
             };
             const queryString = new URLSearchParams(params as any).toString();
@@ -28,13 +28,16 @@ export default function WeatherDisplay() {
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                if (data.hourly && data.hourly.time) {
+                if (data.hourly && data.hourly.time.length > 0) {
+                    // Extract data for 11 AM and 3 PM using slice
+                    const indices = [11, 15]; // Assuming data starts at 00:00 and hourly intervals
                     const hourlyData = {
-                        time: data.hourly.time.map((t: number) => new Date(t * 1000)),
-                        temperature2m: data.hourly.temperature_2m,
-                        precipitationProbability: data.hourly.precipitation_probability,
-                        windSpeed10m: data.hourly.wind_speed_10m,
+                        time: indices.map(index => new Date(data.hourly.time[index] * 1000)),
+                        temperature2m: indices.map(index => data.hourly.temperature_2m[index]),
+                        precipitationProbability: indices.map(index => data.hourly.precipitation_probability[index]),
+                        windSpeed10m: indices.map(index => data.hourly.wind_speed_10m[index]),
                     };
+
                     setWeatherData(hourlyData);
                 } else {
                     setError("No hourly data available");
@@ -55,12 +58,15 @@ export default function WeatherDisplay() {
 
     return (
         <div>
-            <h1>Hourly Weather Updates</h1>
+            <h1>Weather at Lunch and After School</h1>
             {weatherData && (
                 <div>
                     {weatherData.time.map((time, index) => (
                         <div key={index}>
-                            <h2>{time.toLocaleTimeString()}</h2>
+                                             <br></br>
+                            <h2>{(index==0)? "Weather at 3pm"
+                            : "Weather at 11pm "}</h2>
+           
                             <p>Temperature: {weatherData.temperature2m[index]} °C</p>
                             <p>Precipitation Probability: {weatherData.precipitationProbability[index]}%</p>
                             <p>Wind Speed: {weatherData.windSpeed10m[index]} m/s</p>
