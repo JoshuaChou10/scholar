@@ -3,15 +3,15 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
-  const [currentDay, setCurrentDay] = useState(0)
-  const [reminders, setReminders] = useState([])
-  const [reminderText, setReminderText] = useState('')
+  const [currentDay, setCurrentDay] = useState<number>(0)
+  const [reminders, setReminders] = useState<string[]>([])
+  const [reminderText, setReminderText] = useState<string>('')
 
   useEffect(() => {
     const today = new Date()
     setCurrentDay((today.getDate() % 2 === 0) ? 2 : 1)
 
-    const savedReminders = JSON.parse(localStorage.getItem('reminders')) || []
+    const savedReminders = JSON.parse(localStorage.getItem('reminders') || '[]')
     setReminders(savedReminders)
   }, [])
 
@@ -22,7 +22,8 @@ export default function Home() {
     setReminderText('')
   }
 
-  const deleteReminder = (index) => {
+
+  const deleteReminder = (index: number) => {
     const newReminders = reminders.filter((_, i) => i !== index)
     setReminders(newReminders)
     localStorage.setItem('reminders', JSON.stringify(newReminders))
