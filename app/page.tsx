@@ -91,7 +91,7 @@ export default function Home() {
                         <div>
                             <ul className="list-none p-0">
                                 {getOrderedCourses().map((course, index) => (
-                                    <li key={index} className="bg-gray-100 p-2 mb-2 border border-gray-300 text-black">
+                                    <li key={index} className="bg-gray-100 rounded-2xl  p-2 mb-2 border border-gray-300 text-black">
                                         {course}
                                     </li>
                                 ))}
@@ -112,6 +112,7 @@ export default function Home() {
                                     key={index}
                                     type="text"
                                     className="w-1/2 p-2 border border-gray-300 mb-2 text-black"
+                                    placeholder={`course ${index+1}`}
                                     value={course}
                                     onChange={(e) => handleCourseInputChange(index, e.target.value)}
                                 />

@@ -64,10 +64,10 @@ export default function WeatherDisplay() {
                     {weatherData.time.map((time, index) => (
                         <div key={index}>
                                              <br></br>
-                            <h2>{(index==0)? "Weather at 3pm"
-                            : "Weather at 11pm "}</h2>
+                            <b>{(index==0)? "Weather at 3pm"
+                            : "Weather at 11pm "}</b>
            
-                            <p>Temperature: {weatherData.temperature2m[index]} °C</p>
+                            <p>Temperature: <b> {weatherData.temperature2m[index]} °C </b></p>
                             <p>Precipitation Probability: {weatherData.precipitationProbability[index]}%</p>
                             <p>Wind Speed: {weatherData.windSpeed10m[index]} m/s</p>
                         </div>
