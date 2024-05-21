@@ -18,9 +18,7 @@ export default function WeatherDisplay() {
                 latitude: 52.52,
                 longitude: 13.41,
                 hourly: ['temperature_2m', 'precipitation_probability', 'wind_speed_10m'],
-                start: '2024-05-22', // Ensure this is a valid date for forecasts
-                end: '2024-05-22',
-                timezone: 'Europe/Berlin'
+               
             };
             const queryString = new URLSearchParams(params as any).toString();
             const url = `https://api.open-meteo.com/v1/forecast?${queryString}`;
@@ -30,15 +28,19 @@ export default function WeatherDisplay() {
                 const data = await response.json();
                 if (data.hourly && data.hourly.time.length > 0) {
                     // Extract data for 11 AM and 3 PM using slice
-                    const indices = [11, 15]; // Assuming data starts at 00:00 and hourly intervals
-                    const hourlyData = {
-                        time: indices.map(index => new Date(data.hourly.time[index] * 1000)),
-                        temperature2m: indices.map(index => data.hourly.temperature_2m[index]),
-                        precipitationProbability: indices.map(index => data.hourly.precipitation_probability[index]),
-                        windSpeed10m: indices.map(index => data.hourly.wind_speed_10m[index]),
-                    };
+                    const indicesToday = [11, 15]; // Indices for 11 AM and 3 PM today
+            const indicesTomorrow = indicesToday.map(index => index + 24); // Indices for 11 AM and 3 PM tomorrow, assuming 24 hourly entries/day
 
-                    setWeatherData(hourlyData);
+            const allIndices = indicesToday.concat(indicesTomorrow); // Combine today and tomorrow indices
+
+            const hourlyData = {
+                time: allIndices.map(index => new Date(data.hourly.time[index] * 1000)),
+                temperature2m: allIndices.map(index => data.hourly.temperature_2m[index]),
+                precipitationProbability: allIndices.map(index => data.hourly.precipitation_probability[index]),
+                windSpeed10m: allIndices.map(index => data.hourly.wind_speed_10m[index]),
+            };
+
+            setWeatherData(hourlyData);
                 } else {
                     setError("No hourly data available");
                 }
@@ -64,7 +66,8 @@ export default function WeatherDisplay() {
                     {weatherData.time.map((time, index) => (
                         <div key={index}>
                                              <br></br>
-                            <b>{(index==0)? "Weather at 3pm"
+                                             <h2>{(index==2)? "Weather Tomorrow\n":""} </h2>
+                            <b>{(index%2==0)? "Weather at 3pm"
                             : "Weather at 11pm "}</b>
            
                             <p>Temperature: <b> {weatherData.temperature2m[index]} °C </b></p>

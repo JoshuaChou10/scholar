@@ -88,22 +88,23 @@ export default function Home() {
                 <div className="flex-1">
                     <h2 className="text-2xl text-white mb-4">Today is day {currentDay}, {new Date().getFullYear()} {new Date().toLocaleString('default', { month: 'long' })} {new Date().getDate()}</h2>
                     {courses.length ? (
-                        <div>
-                            <ul className="list-none p-0">
-                                {getOrderedCourses().map((course, index) => (
-                                    <li key={index} className="bg-gray-100 rounded-2xl  p-2 mb-2 border border-gray-300 text-black">
-                                        {course}
-                                    </li>
-                                ))}
-                            </ul>
-                            <button 
-                                className="bg-blue-500 text-white py-2 px-4 mb-4" 
-                                onClick={resetCourses}
-                            >
-                                Edit Courses
-                            </button>
-                            <h3 className="text-xl text-white mb-4">Tomorrow is day {(currentDay === 1) ? 2 : 1}</h3>
-                        </div>
+                       <div>
+                       <ul className="list-none p-0">
+                           {getOrderedCourses().map((course, index) => (
+                               <li key={index} className="bg-transparent rounded-2xl p-2 mb-2 border border-blue-500 text-white">
+                                   {course}
+                               </li>
+                           ))}
+                       </ul>
+                       <button 
+                           className="bg-blue-500 text-white py-2 px-4 mb-4" 
+                           onClick={resetCourses}
+                       >
+                           Edit Courses
+                       </button>
+                       {/* <h3 className="text-xl text-white mb-4">Tomorrow is day {(currentDay === 1) ? 2 : 1}</h3> */}
+                   </div>
+                   
                     ) : (
                         <div>
                             <h2 className="text-xl text-white mb-2">Set your courses (Order for Day 1)</h2>
@@ -128,7 +129,7 @@ export default function Home() {
                 </div>
             </div>
 
-            <h2 className="text-xl text-white mb-2">Set a Reminder</h2>
+            <h2 className="text-xl text-white mb-2 mt-5">Set a Reminder</h2>
             <input
                 type="text"
                 className="w-full p-2 border border-gray-300 mb-2 text-black"

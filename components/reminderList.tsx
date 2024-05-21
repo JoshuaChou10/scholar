@@ -21,28 +21,37 @@ export default function ReminderList({ reminders, deleteReminder }) {
     };
     return (
         <ul className="list-none p-0">
-          {reminders.map((reminder, index) => (
-            <li
-              key={index}
-              className="p-2 mb-2 flex justify-between items-center border-b border-blue-500/50 text-white bg-transparent shadow-lg shadow-blue-500/50"
-            >
-              <div className="flex-grow" onClick={() => toggleDescription(index)}>
-                {reminder.text} - In {getDaysUntil(reminder.date)} Days
-              </div>
-              <button
-                className="bg-red-500 text-white py-1 px-2"
-                onClick={() => deleteReminder(index)}
-              >
-                Delete
-              </button>
-              {visibleDescriptionIndex === index && (
-                <div className="text-gray-700 p-2">
-                  {reminder.desc}
-                  {reminder.date}
-                </div>
-              )}
-            </li>
-          ))}
+            {reminders.map((reminder, index) => (
+                <li
+                    key={index}
+                    className="p-2 mb-2 border-b border-blue-500/50 text-white bg-transparent shadow-lg shadow-blue-500/50"
+                >
+                    {/* Container for title and delete button */}
+                    <div className="flex justify-between items-center">
+                        {/* Clickable title */}
+                        <div className="flex-grow cursor-pointer" onClick={() => toggleDescription(index)}>
+                            {reminder.text} - In {getDaysUntil(reminder.date)} Days
+                        </div>
+                        {/* Delete button */}
+                        <button
+                            className="bg-red-500 text-white py-1 px-2"
+                            onClick={() => deleteReminder(index)}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                    
+                    {/* Conditionally displayed description below the title and button */}
+                    {visibleDescriptionIndex === index && (
+                        <div className="text-blue-500 p-2 mt-2">
+                            {reminder.desc}
+                            <br />
+                            Date: {reminder.date}
+                        </div>
+                    )}
+                </li>
+            ))}
         </ul>
-      );
+    );
+    
 }
