@@ -6,10 +6,7 @@ import ReminderList from '../components/reminderList'
 import Image from 'next/image'
 export default function Home() {
   const [currentDay, setCurrentDay] = useState<number>(0)
-  const [reminders, setReminders] = useState<{ text: string; date: string, desc:string}[]>([])
-  const [reminderText, setReminderText] = useState<string>('')
-  const [reminderDate, setReminderDate] = useState<string>('')
-  const [reminderDesc, setReminderDesc] = useState<string>('')
+  
   const [courses, setCourses] = useState<string[]>([])
   const [courseInputs, setCourseInputs] = useState<string[]>(['', '', '', ''])
   // const [email,setEmail]=useState('')
@@ -18,18 +15,7 @@ export default function Home() {
     const today = new Date()
     setCurrentDay((today.getDate() % 2 === 0) ? 2 : 1)
 
-    const savedReminders = JSON.parse(localStorage.getItem('reminders') || "[]")
-    if (savedReminders.length==0){
-        setReminders([{
-            text: 'Reminders will show up here',
-            date: new Date().toISOString().split('T')[0], // Set today's date as default
-            desc: 'Example reminder description'
-        }]);
-    }
-    else{
-        setReminders(savedReminders)
-    }
-
+    
 
     const savedCourses = JSON.parse(localStorage.getItem('courses') || '[]')
     if (savedCourses.length > 0) {
@@ -43,21 +29,6 @@ export default function Home() {
 //     localStorage.setItem('email', email);
 //   }, [email]); 
   
-
-  const addReminder = () => {
-    const newReminders = [...reminders, { text: reminderText, date: reminderDate, desc:reminderDesc }]
-    setReminders(newReminders)
-    localStorage.setItem('reminders', JSON.stringify(newReminders))
-    setReminderText('')
-    setReminderDesc('')
-    setReminderDate('')
-  }
-
-  const deleteReminder = (index: number) => {
-    const newReminders = reminders.filter((_, i) => i !== index)
-    setReminders(newReminders)
-    localStorage.setItem('reminders', JSON.stringify(newReminders))
-  }
 
   const handleCourseInputChange = (index: number, value: string) => {
     const newCourseInputs = [...courseInputs]
@@ -149,42 +120,11 @@ export default function Home() {
                 </div>
             </div>
 
-            <h2 className="text-xl text-white mb-2 mt-5">Set a Reminder</h2>
-            <input
-                type="text"
-                className="w-full p-2 border border-gray-300 mb-2 text-black"
-                placeholder="Reminder title"
-                value={reminderText}
-                onChange={(e) => setReminderText(e.target.value)}
-            />
-            <input
-                type="text"
-                className="w-full p-2 border border-gray-300 mb-2 text-black"
-                placeholder="Reminder Description"
-                value={reminderDesc}
-                onChange={(e) => setReminderDesc(e.target.value)}
-            />
-            <input
-                type="date"
-                className="w-full p-2 border border-gray-300 mb-2 text-black"
-                value={reminderDate}
-                onChange={(e) => setReminderDate(e.target.value)}
-            />
-            <button
-                className="bg-blue-500 text-white py-2 px-4 mb-4"
-                onClick={addReminder}
-            >
-                
-                Add Reminder
-            </button>
+            
             <h2 className="text-xl text-white mb-2">Current Reminders</h2>
-            <ReminderList reminders={reminders} deleteReminder={deleteReminder} />
+            <ReminderList/>
         </main>
     </div>
 );
                             }
-                            export interface Reminder {
-                              text: string;
-                              date: string;
-                              desc: string;
-                          }
+                         
