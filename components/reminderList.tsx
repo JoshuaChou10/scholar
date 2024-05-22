@@ -36,7 +36,7 @@ export default function ReminderList({ reminders, deleteReminder }:ReminderListP
                     <div className="flex justify-between items-center">
                         {/* Clickable title */}
                         <div className={`flex-grow cursor-pointer flex items-center ${(getDaysUntil(reminder.date)<2? 'text-red': 'text-white')}`} onClick={() => toggleDescription(index)}>
-                            {reminder.text} {reminder.date && `-  ${(getDaysUntil(reminder.date))<=0? 'Due Today':`In ${getDaysUntil(reminder.date)} Days`}`}
+                            {reminder.text} {reminder.date && `-  ${(getDaysUntil(reminder.date))<=0? 'Due Today':`Due in ${getDaysUntil(reminder.date)} Days`}`}
                             <svg className="fill-current text-white w-4 h-4 ml-2 transform transition-transform duration-300" style={{ transform: visibleDescriptionIndex === index ? 'rotate(180deg)' : 'rotate(0deg)' }} viewBox="0 0 20 20">
                                 <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                             </svg>

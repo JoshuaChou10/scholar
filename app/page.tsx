@@ -12,13 +12,23 @@ export default function Home() {
   const [courses, setCourses] = useState<string[]>([])
   const [courseInputs, setCourseInputs] = useState<string[]>(['', '', '', ''])
   // const [email,setEmail]=useState('')
-
+  
   useEffect(() => {
     const today = new Date()
     setCurrentDay((today.getDate() % 2 === 0) ? 2 : 1)
 
-    const savedReminders = JSON.parse(localStorage.getItem('reminders') || '[]')
-    setReminders(savedReminders)
+    const savedReminders = JSON.parse(localStorage.getItem('reminders') || "[]")
+    if (savedReminders.length==0){
+        setReminders([{
+            text: 'Reminders will show up here',
+            date: new Date().toISOString().split('T')[0], // Set today's date as default
+            desc: 'Example reminder description'
+        }]);
+    }
+    else{
+        setReminders(savedReminders)
+    }
+
 
     const savedCourses = JSON.parse(localStorage.getItem('courses') || '[]')
     if (savedCourses.length > 0) {
@@ -158,7 +168,7 @@ export default function Home() {
                 
                 Add Reminder
             </button>
-            
+            <h2 className="text-xl text-white mb-2">Current Reminders</h2>
             <ReminderList reminders={reminders} deleteReminder={deleteReminder} />
         </main>
     </div>
