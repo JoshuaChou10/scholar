@@ -15,10 +15,10 @@ export default function WeatherDisplay() {
     useEffect(() => {
         const fetchWeather = async () => {
             const params = {
-                latitude: 52.52,
-                longitude: 13.41,
+                latitude: 43.5890,  // Latitude for Mississauga
+                longitude: -79.6441,  // Longitude for Mississauga
                 hourly: ['temperature_2m', 'precipitation_probability', 'wind_speed_10m'],
-               
+                timezone: "America/Toronto"  // Timezone for Eastern Time
             };
             const queryString = new URLSearchParams(params as any).toString();
             const url = `https://api.open-meteo.com/v1/forecast?${queryString}`;
@@ -59,16 +59,16 @@ export default function WeatherDisplay() {
     if (error) return <p>Error: {error}</p>;
 
     return (
-        <div>
-            <h1>Weather at Lunch and After School</h1>
+        <div className="bg-blue-300 rounded-2xl p-5">
+            <h1 className="font-extrabold">Weather at Lunch and After School</h1>
             {weatherData && (
-                <div>
+                <div >
                     {weatherData.time.map((time, index) => (
                         <div key={index}>
                                              <br></br>
-                                             <h2>{(index==2)? "Weather Tomorrow\n":""} </h2>
-                            <b>{(index%2==0)? "Weather at 3pm"
-                            : "Weather at 11pm "}</b>
+                                             <h2>{(index==2)? <b>Weather Tomorrow<br></br></b>:""} </h2>
+                            <b>{(index%2==0)? "Weather at 11am"
+                            : "Weather at 3pm "}</b>
            
                             <p>Temperature: <b> {weatherData.temperature2m[index]} °C </b></p>
                             <p>Precipitation Probability: {weatherData.precipitationProbability[index]}%</p>

@@ -74,24 +74,25 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-black text-gray-800">
         <Head>
-            <title>School Tracker</title>
+            <title>Day Manager</title>
         </Head>
 
-        <aside className="w-1/4 bg-white p-4">
+        <aside className="w-1/4 p-4">
             <WeatherDisplay />
         </aside>
 
         <main className="flex-1 p-4">
-            <h1 className="text-3xl text-white text-center mb-4">School Manager</h1>
+            <h1 className="text-3xl text-white text-center mb-4">Day Manager-John Fraser</h1>
 
             <div className="flex justify-between items-start space-x-4">
                 <div className="flex-1">
-                    <h2 className="text-2xl text-white mb-4">Today is day {currentDay}, {new Date().getFullYear()} {new Date().toLocaleString('default', { month: 'long' })} {new Date().getDate()}</h2>
+                    <h2 className="text-2xl text-white mb-4">Today is {new Date().toLocaleString('en-US',{weekday:'long'})}, Day {currentDay}</h2>
+                    <h3 className="text-0.4xl text-white mb-4">{new Date().getFullYear()} {new Date().toLocaleString('default', { month: 'long' })} {new Date().getDate()}</h3>
                     {courses.length ? (
                        <div>
                        <ul className="list-none p-0">
                            {getOrderedCourses().map((course, index) => (
-                               <li key={index} className="bg-transparent rounded-2xl p-2 mb-2 border border-blue-500 text-white">
+                               <li key={index} className="bg-blue-300 rounded-2xl p-2 mb-2 border border-blue-500 text-black text-center text-extrabold">
                                    {course}
                                </li>
                            ))}
@@ -156,9 +157,14 @@ export default function Home() {
             >
                 Add Reminder
             </button>
-
+            
             <ReminderList reminders={reminders} deleteReminder={deleteReminder} />
         </main>
     </div>
 );
                             }
+                            export interface Reminder {
+                              text: string;
+                              date: string;
+                              desc: string;
+                          }
