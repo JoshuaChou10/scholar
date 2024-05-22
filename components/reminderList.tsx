@@ -30,7 +30,7 @@ export default function ReminderList({ reminders, deleteReminder }:ReminderListP
             {reminders.map((reminder:Reminder, index:number) => (
                 <li
                     key={index}
-                    className="p-2 mb-2 border-b border-blue-500/50 text-white bg-transparent shadow-lg shadow-blue-500/50 transition-all duration-300"
+                    className="p-2 mb-2 border border-blue-500/50 rounded-2xl text-white bg-transparent shadow-lg shadow-blue-500/50 transition-all duration-300"
                 >
                     {/* Container for title and delete button */}
                     <div className="flex justify-between items-center">
@@ -43,7 +43,7 @@ export default function ReminderList({ reminders, deleteReminder }:ReminderListP
                         </div>
                         {/* Delete button */}
                         <button
-                            className="bg-red-500 text-white py-1 px-2"
+                            className="bg-red-500 rounded-full text-white py-1 px-2"
                             onClick={() => deleteReminder(index)}
                         >
                             Delete
@@ -55,7 +55,7 @@ export default function ReminderList({ reminders, deleteReminder }:ReminderListP
                         <div className="text-blue-500 p-2 mt-2 transition-all duration-300" style={{ maxHeight: visibleDescriptionIndex === index ? '100px' : '0', overflow: 'hidden' }}>
                             {reminder.desc}
                             <br />
-                            To be completed by: {reminder.date}
+                            To be completed by: {(reminder.date)? reminder.date:"Whenever you want"}
                         </div>
                     )}
                 </li>

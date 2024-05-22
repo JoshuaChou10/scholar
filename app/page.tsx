@@ -1,8 +1,9 @@
 'use client'
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
-import WeatherDisplay from '/components/weather'
-import ReminderList from '/components/reminderList'
+import WeatherDisplay from '../components/weather'
+import ReminderList from '../components/reminderList'
+import Image from 'next/image'
 export default function Home() {
   const [currentDay, setCurrentDay] = useState<number>(0)
   const [reminders, setReminders] = useState<{ text: string; date: string, desc:string}[]>([])
@@ -84,7 +85,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-black text-gray-800">
         <Head>
-            <title>Day Manager</title>
+            <title>Home</title>
         </Head>
 
         <aside className="w-1/4 p-4">
@@ -92,17 +93,25 @@ export default function Home() {
         </aside>
 
         <main className="flex-1 p-4">
-            <h1 className="text-3xl text-white text-center mb-4">Day Manager-John Fraser</h1>
-
+  <div className='flex items-center justify-center'>
+        <Image
+                src="/logo.png" 
+                alt="Home Logo"
+                width={100} // Set the desired width
+                height={40} // Set the desired height
+                layout="fixed" // This can be responsive or fill as needed
+            />
+      </div>
             <div className="flex justify-between items-start space-x-4">
-                <div className="flex-1">
-                    <h2 className="text-2xl text-white mb-4">Today is {new Date().toLocaleString('en-US',{weekday:'long'})}, Day {currentDay}</h2>
+                <div className="flex-1 ">
+                    <h2 className="text-2xl text-white mb-2">Today is {new Date().toLocaleString('en-US',{weekday:'long'})}, Day {currentDay}</h2>
                     <h3 className="text-0.4xl text-white mb-4">{new Date().getFullYear()} {new Date().toLocaleString('default', { month: 'long' })} {new Date().getDate()}</h3>
+                    <h2 className="text-2xl text-white mb-4">Schedule</h2>
                     {courses.length ? (
                        <div>
-                       <ul className="list-none p-0">
+                       <ul className="list-none p-0  ">
                            {getOrderedCourses().map((course, index) => (
-                               <li key={index} className="bg-blue-300 rounded-2xl p-2 mb-2 border border-blue-500 text-black text-center text-extrabold">
+                               <li key={index} className="  bg-blue-300 rounded-2xl p-2 mb-2 border border-blue-500 text-black text-center text-extrabold">
                                    {course}
                                </li>
                            ))}
@@ -123,7 +132,7 @@ export default function Home() {
                                 <input
                                     key={index}
                                     type="text"
-                                    className="w-1/2 p-2 border border-gray-300 mb-2 text-black"
+                                    className="w-1/2 p-2 border border-gray-300 mb-2 rounded-4xl text-black"
                                     placeholder={`course ${index+1}`}
                                     value={course}
                                     onChange={(e) => handleCourseInputChange(index, e.target.value)}

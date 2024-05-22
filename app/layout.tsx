@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Day Manager-John Fraser",
-  description: "See what day it is, what courses you have , and set reminders. ",
+  title: "Home",
+  description: "Everything you need in one place. See what your schedule, check the weather and set reminders. ",
 };
 
 export default function RootLayout({
