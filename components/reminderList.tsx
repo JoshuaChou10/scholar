@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import Reminder from '/components/page'
 // Assuming your reminder object might look something like this
 // reminder = { text: 'Doctor Appointment', date: '2024-01-01', desc: 'Annual check-up at 3 PM' }
-
-export default function ReminderList({ reminders, deleteReminder }) {
+interface ReminderListProps {
+    reminders: Reminder[];
+    deleteReminder: (index: number) => void; // Function that takes an index and returns nothing
+}
+export default function ReminderList({ reminders, deleteReminder }:ReminderListProps) {
     // State to track the visible description; null initially means all are collapsed
-    const [visibleDescriptionIndex, setVisibleDescriptionIndex] = useState(null);
+    const [visibleDescriptionIndex, setVisibleDescriptionIndex] = useState<number | null>(null);
+
    
     // Toggle function to show/hide descriptions
-    const toggleDescription = (index:number) => {
-        // If the clicked index is already open, close it, otherwise open the clicked index
+    
+    const toggleDescription = (index: number) => {
         setVisibleDescriptionIndex(visibleDescriptionIndex === index ? null : index);
     };
     const getDaysUntil = (dateStr: string) => {

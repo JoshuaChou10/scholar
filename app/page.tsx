@@ -155,6 +155,7 @@ export default function Home() {
                 className="bg-blue-500 text-white py-2 px-4 mb-4"
                 onClick={addReminder}
             >
+                
                 Add Reminder
             </button>
             
