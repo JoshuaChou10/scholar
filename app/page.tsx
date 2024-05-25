@@ -144,8 +144,8 @@ return;
           <Image
             src="/logo.png"
             alt="Home Logo"
-            width={100} // Set the desired width
-            height={40} // Set the desired height
+            width={200} // Set the desired width
+            height={120} // Set the desired height
             layout="fixed" // This can be responsive or fill as needed
           />
         </div>
