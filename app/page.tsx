@@ -183,8 +183,9 @@ return;
               value={course}
               onChange={(e) => handleCourseInputChange(index, e.target.value)}
             />
+            
           ))}
-          <button
+                <button
             className="bg-blue-500 text-white py-2 px-4"
             onClick={setCoursesHandler}
           >
@@ -203,8 +204,19 @@ return;
   </div>
 </div>
 
-        <h2 className="text-xl text-white mb-2 mt-5">Set a Reminder</h2>
-       
+<div className="flex items-center mb-2 mt-5">
+  <h2 className="text-xl text-white mr-4">Set a Reminder</h2>
+  <div className="relative w-22">
+    <input
+      required
+      type="date"
+      className="w-full p-2 border border-gray-300 text-black "
+      value={reminderDate}
+      onChange={(e) => setReminderDate(e.target.value)}
+    />
+  </div>
+</div>
+     
         <input
           required
           type="text"
@@ -221,18 +233,16 @@ return;
           value={reminderDesc}
           onChange={(e) => setReminderDesc(e.target.value)}
         />
-        <input
-          type="date"
-          className="w-full p-2 border border-gray-300 mb-2 text-black"
-          value={reminderDate}
-          onChange={(e) => setReminderDate(e.target.value)}
-        />
+    
+ 
+
         <Select
           options={options}
     
           value={options.find(option => option.value === reminderCourse)}
           onChange={handleSelectChange}
         />
+       
         <button
           className="bg-blue-500 text-white py-2 px-4 mb-4 mt-4"
           onClick={addReminder}
