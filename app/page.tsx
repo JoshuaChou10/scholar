@@ -159,7 +159,7 @@ return;
         <div>
           <ul className="list-none p-0">
             {getOrderedCourses().map((course, index) => (
-              <li key={index} onClick={() => setCoursePage(course)} className={`border ${(coursePage==course)? 'border-red rounded-3xl': 'border-blue-300' } bg-blue-300 rounded-2xl p-2 mb-2 text-black text-center text-extrabold`}>
+              <li key={index} onClick={() => setCoursePage(course)} className={`border ${(coursePage==course)? 'border-red rounded-3xl': 'border-blue-300' } hover:border-blue-500 hover:shadow-lg hover:bg-blue-400 active:bg-blue-500 bg-blue-300 rounded-2xl p-2 mb-2 text-black text-center text-extrabold`}>
                 {course}
               </li>
             ))}
@@ -193,9 +193,12 @@ return;
         </div>
       )}
     </div>
-    <div className="w-1/2 mt-10 mx-3">
-      <h2 className="text-2xl text-white mb-4">{coursePage} Reminders</h2>
+
+    <div className="w-1/2 mt-10 mx-3 flex flex-col">
+  <h2 className="text-2xl text-white mb-4">{coursePage} Reminders</h2>
+  <div className="border border-blue-300 bg-gray-900 p-4 rounded-lg shadow-lg flex-grow flex flex-col">
       <ReminderList reminders={getCourseReminders(coursePage)} deleteReminder={deleteReminder} editReminder={editReminder} />
+      </div>
     </div>
   </div>
 </div>
@@ -236,7 +239,7 @@ return;
         >
           Add Reminder
         </button>
-
+      
         <h2 className="text-xl text-white mb-2">Other Reminders</h2>
         <ReminderList reminders={getOtherReminders()} deleteReminder={deleteReminder} editReminder={editReminder} />
       </main>
