@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import editReminder from '../app/page'
-import deleteReminder from '../app/page'
+import React, { useState } from 'react';
+
+import {Reminder} from '../app/page'
+
+interface ReminderListProps {
+    reminders: Reminder[];
+    editReminder: (id:string) => void;
+    deleteReminder: (id:string) => void;
+}
 
 
-export default function ReminderList(reminders) {
+export default function ReminderList ({ reminders, editReminder, deleteReminder }:ReminderListProps) {
     
     // State to track the visible description; null initially means all are collapsed
     const [visibleDescriptionIndex, setVisibleDescriptionIndex] = useState<number | null>(null);
@@ -31,6 +37,7 @@ export default function ReminderList(reminders) {
             key={index}
             className="p-2 mb-2 border border-blue-500/50 rounded-2xl text-white bg-transparent shadow-lg shadow-blue-500/50 transition-all duration-300"
         >
+       
     
             <div className="flex justify-between items-center">
                 {/* Clickable title */}
@@ -43,13 +50,13 @@ export default function ReminderList(reminders) {
                 {/* Delete button */}
                 <button
                     className="bg-red-500 rounded-full text-white py-1 px-2 mx-3"
-                    onClick={() => deleteReminder(index)}
+                    onClick={() => deleteReminder(reminder.id)}
                 >
                     Delete
                 </button>
                 <button
                     className="bg-blue-500 rounded-full text-white py-1 px-2"
-                    onClick={() => editReminder(index)}
+                    onClick={() => editReminder(reminder.id)}
                 >
                     Edit
                 </button>
