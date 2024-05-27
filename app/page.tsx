@@ -1,12 +1,16 @@
 'use client'
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
-import Select, { SingleValue } from 'react-select'
+import Select, { SingleValue, MultiValue } from 'react-select'
+import {StylesConfig} from 'react-select'
 import WeatherDisplay from '../components/weather'
+import LinkSection from '../components/linkSection'
 import ReminderList from '../components/reminderList'
 import Image from 'next/image'
 
+
 export default function Home() {
+  
   const [currentDay, setCurrentDay] = useState<number>(0)
   const [courses, setCourses] = useState<string[]>([])
   const [courseInputs, setCourseInputs] = useState<string[]>(['', '', '', ''])
@@ -17,10 +21,7 @@ export default function Home() {
   const [reminderDesc, setReminderDesc] = useState<string>('')
   const [reminderCourse, setReminderCourse] = useState<string>('')
 
-  interface optionType {
-    value: string;
-    label: string;
-  }
+  
 
   useEffect(() => {
     const today = new Date()
@@ -119,15 +120,51 @@ return;
     }
     return courses
   }
+  interface optionType {
+    value: string;
+    label: string;
+  }
+  
+  const customStyles:StylesConfig<optionType> = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: '#1f2937', // Equivalent to bg-gray-800
+      borderColor: '#4b5563', // Equivalent to border-gray-600
+      color: '#fff', // Text color
+      '&:hover': {
+        borderColor: '#6b7280' // Lighter border on hover
+      },
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#fff', // Text color for selected option
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: '#1f2937', // Background color for dropdown menu
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isFocused ? '#374151' : '#1f2937', // Background color on hover and default
+      color: '#fff', // Text color
+      '&:hover': {
+        backgroundColor: '#374151', // Background color on hover
+      },
+    }),
+  };
 
   const options: optionType[] = [
     { value: '', label: 'Course (optional)' },
     ...getOrderedCourses().map(course => ({ value: course, label: course }))
   ];
 
-  const handleSelectChange = (selectedOption: SingleValue<optionType>) => {
-    setReminderCourse(selectedOption ? selectedOption.value : '')
-  }
+  const handleSelectChange = (selectedOption: SingleValue<optionType> | MultiValue<optionType>) => {
+    if (selectedOption && !Array.isArray(selectedOption)) {
+      setReminderCourse((selectedOption as optionType).value);
+    } else {
+      setReminderCourse('');
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-black text-gray-800">
@@ -137,6 +174,7 @@ return;
 
       <aside className="w-1/4 p-4">
         <WeatherDisplay />
+        <LinkSection/>
       </aside>
 
       <main className="flex-1 p-4">
@@ -211,16 +249,19 @@ return;
       required
       type="date"
       className="w-full p-2 border border-gray-300 text-black "
+      
       value={reminderDate}
       onChange={(e) => setReminderDate(e.target.value)}
     />
   </div>
 </div>
-     
+<div className="flex flex-col space-y-2 mt-2 mb-4">
         <input
           required
           type="text"
-          className="w-full p-2 border border-gray-300 mb-2 text-black"
+
+          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
+
           placeholder="Reminder title"
           value={reminderText}
           onChange={(e) => setReminderText(e.target.value)}
@@ -228,7 +269,7 @@ return;
         <input
         
           type="text"
-          className="w-full p-2 border border-gray-300 mb-2 text-black"
+          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
           placeholder="Reminder Details"
           value={reminderDesc}
           onChange={(e) => setReminderDesc(e.target.value)}
@@ -238,11 +279,11 @@ return;
 
         <Select
           options={options}
-    
+          styles={customStyles}
           value={options.find(option => option.value === reminderCourse)}
           onChange={handleSelectChange}
         />
-       
+       </div>
         <button
           className="bg-blue-500 text-white py-2 px-4 mb-4 mt-4"
           onClick={addReminder}
