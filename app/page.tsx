@@ -97,8 +97,20 @@ return;
   }
 
   const setCoursesHandler = () => {
-    setCourses(courseInputs)
-    localStorage.setItem('courses', JSON.stringify(courseInputs))
+    const seen: { [key: string]: number } = {}; 
+    // eg. seen[Math] goes to the else, and seen[Math] is set to 1, then if it is seen again so seen[Math] exists, then will ++ so will show 2
+
+  const updatedCourses = courseInputs.map(course => {
+    if (seen[course]) {
+      seen[course]++;
+      return course + seen[course];
+    } else {
+      seen[course] = 1;
+      return course;
+    }
+  });
+    setCourses(updatedCourses)
+    localStorage.setItem('courses', JSON.stringify(updatedCourses))
   }
 
   const resetCourses = () => {
