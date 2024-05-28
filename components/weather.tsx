@@ -57,24 +57,29 @@ export default function WeatherDisplay() {
     }, []);
 
     return (
-        <div className="bg-blue-300 rounded-2xl p-5">
-            <h1 className="font-extrabold">Weather at Lunch and After School</h1>
-            {loading && <p>Loading weather...</p>}
-            {error && <p>Error: {error}</p>}
-            {weatherData && (
-                <div>
-                    {weatherData.time.map((time, index) => (
-                        <div key={index}>
-                            <br />
-                            <h2>{(index === 2) ? <b>Weather Tomorrow<br /></b> : ""} </h2>
-                            <b>{(index % 2 === 0) ? "Weather at 11am" : "Weather at 3pm "}</b>
-                            <p>Temperature: <b>{weatherData.temperature2m[index]} °C </b></p>
-                            <p>Precipitation Probability: {weatherData.precipitationProbability[index]}%</p>
-                            <p>Wind Speed: {weatherData.windSpeed10m[index]} m/s</p>
-                        </div>
-                    ))}
-                </div>
-            )}
+        <div className="rounded-2xl border border-blue-300 bg-gray-900 p-4 rounded-lg shadow-lg">
+            <h1 className="font-extrabold text-2xl text-blue-100 mb-4">Weather at Lunch and After School</h1>
+{loading && <p>Loading weather...</p>}
+{error && <p>Error: {error}</p>}
+{weatherData && (
+    <div >
+        {weatherData.time.map((time, index) => (
+            <div key={index} className="inline-block w-1/2">
+                <br />
+                <h2 className={(index === 2) ? "text-blue-100 font-semibold" : ""}>{(index === 2) ? <b>Weather Tomorrow<br /></b> : ""}</h2>
+                <h2 className={(index === 0) ? "text-blue-100 font-semibold" : ""}>{(index === 0) ? <b>Weather Today<br /></b> : ""}</h2>
+                <p className="text-lg text-blue-100"><b>{(index % 2 === 0) ? "11am" : "3pm "}</b> {weatherData.temperature2m[index]} °C</p>
+                <p className='text-white'>
+                    <i className="fas fa-cloud-rain"></i> {weatherData.precipitationProbability[index]}%
+                </p>
+                <p className='text-white'>
+                    <i className="fas fa-wind"></i> {weatherData.windSpeed10m[index]} m/s
+                </p>
+            </div>
+        ))}
+    </div>
+)}
+
             <button 
                 className="bg-blue-500 text-white py-2 px-4 mt-4 rounded"
                 onClick={fetchWeather}

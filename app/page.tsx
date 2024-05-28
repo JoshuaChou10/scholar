@@ -197,7 +197,7 @@ return;
         <div>
           <ul className="list-none p-0">
             {getOrderedCourses().map((course, index) => (
-              <li key={index} onClick={() => setCoursePage(course)} className={`border ${(coursePage==course)? 'border-red rounded-3xl': 'border-blue-300' } hover:border-blue-500 hover:shadow-lg hover:bg-blue-400 active:bg-blue-500 bg-blue-300 rounded-2xl p-2 mb-2 text-black text-center text-extrabold`}>
+              <li key={index} onClick={() => setCoursePage(course)} className={`border ${(coursePage==course)? ' rounded-3xl bg-blue-500': 'border-blue-300' } hover:border-blue-500 hover:shadow-lg hover:bg-blue-400 active:bg-blue-500 bg-blue-300 rounded-2xl p-2 mb-2 text-black text-center text-extrabold`}>
                 {course}
               </li>
             ))}
@@ -216,7 +216,7 @@ return;
             <input
               key={index}
               type="text"
-              className="w-full p-2 border border-gray-300 mb-2 rounded-4xl text-black"
+              className="w-full p-2 border border-gray-300 mb-2 rounded-full text-black"
               placeholder={`course ${index + 1}`}
               value={course}
               onChange={(e) => handleCourseInputChange(index, e.target.value)}
@@ -248,7 +248,7 @@ return;
     <input
       required
       type="date"
-      className="w-full p-2 border border-gray-300 text-black "
+      className="w-full p-2 border border-gray-300 text-black rounded-full "
       
       value={reminderDate}
       onChange={(e) => setReminderDate(e.target.value)}
