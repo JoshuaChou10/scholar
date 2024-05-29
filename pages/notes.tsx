@@ -12,29 +12,49 @@ export default function Notes() {
   const [isActive, setIsActive] = useState(false);
   const [goal, setGoal]=useState<number|null>(null)
   const [goalReached, setGoalReached] = useState(false);
+  const [editId,setEditId]=useState<string|null>(null)
 
   useEffect(() => {
     const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+    const savedTime=JSON.parse(localStorage.getItem('seconds') || '0')
     setNotes(savedNotes);
+    setSeconds(savedTime)
   }, []);
+
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
     if (isActive) {
       interval = setInterval(() => {
         setSeconds((seconds) => seconds + 1);
+       
       }, 1000);
+      if(seconds%60==0){
+        localStorage.setItem('seconds',JSON.stringify(seconds))
+      }
     } else if (!isActive && seconds !== 0) {
       clearInterval(interval);
+      localStorage.setItem('seconds',JSON.stringify(seconds))
     }
     return () => clearInterval(interval);
   }, [isActive, seconds]);
+
   useEffect(() => {
-    if (goal !== null && seconds >= goal * 60) {
+    if (goal !== null && goal!=0 && seconds >= goal * 60) {
       setGoalReached(true);
+    }else{
+      setGoalReached(false);
     }
   }, [seconds, goal]);
-  function addNote() {
-    const newNotes = [...notes, { id: crypto.randomUUID(), title: title, content: content }];
+
+  function addorUpdateNote() {
+    let newNotes:typeof notes;
+    if(editId){
+    newNotes=notes.map(note=>note.id==editId? {...note,title,content}:note) //{...note, title, content} gets all properties and overrides the title and content. Otherwise if id is not found then jus return original :note
+    setEditId(null)
+    }
+    else{
+    newNotes = [...notes, { id: crypto.randomUUID(), title: title, content: content }];
+    }
     setNotes(newNotes);
     localStorage.setItem('notes', JSON.stringify(newNotes));
     setTitle('');
@@ -54,16 +74,21 @@ export default function Notes() {
     if (noteToEdit) {
       setTitle(noteToEdit.title);
       setContent(noteToEdit.content);
+      setEditId(id)
+      console.log(editId)
     }
-    deleteNote(id);
   }
   function toggle() {
     setIsActive(!isActive);
   }
 
   function reset() {
-    setSeconds(0);
-    setIsActive(false);
+    if(window.confirm("Are you sure you want to reset your study timer?")){
+      setSeconds(0);
+      localStorage.setItem('seconds',JSON.stringify(seconds))
+      setIsActive(false);
+    }
+
   }
 
   const formatTime = (seconds: number) => {
@@ -110,10 +135,10 @@ export default function Notes() {
           className="p-2 rounded bg-gray-800 text-white border border-gray-600"
         />
         <button
-          onClick={addNote}
+          onClick={addorUpdateNote}
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
         >
-          Add Note
+          {(editId)? "Edit Note":"Add Note"}
         </button>
       </div>
 
@@ -144,7 +169,7 @@ export default function Notes() {
           </li>
         ))}
       </ul>
-      <div className="mt-8">
+      <div className={`mt-8 border border-blue-300 ${(goalReached)? 'bg-green-900':'bg-gray-900'} p-4 rounded-lg shadow-lg flex-grow flex flex-col`}>
         <h2 className="text-white text-2xl mb-4">Study Timer</h2>
         <div className="flex flex-col items-center">
           <div className="text-4xl text-white mb-4">{formatTime(seconds)}</div>
@@ -153,7 +178,12 @@ export default function Notes() {
               type="number"
               placeholder="Set goal (minutes)"
               value={goal !== null ? goal : ''}
-              onChange={(e) => setGoal(Number(e.target.value))}
+              onChange={(e) => {
+               
+                setGoal(Number(e.target.value))
+                
+              }
+            }
               className="p-2 rounded bg-gray-800 text-white border border-gray-600"
             />
              {goalReached && <div className="text-green-500 text-4xl mt-4">Goal reached!</div>}

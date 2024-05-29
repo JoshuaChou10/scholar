@@ -21,7 +21,7 @@ export default function Home() {
   const [reminderDate, setReminderDate] = useState<string>('')
   const [reminderDesc, setReminderDesc] = useState<string>('')
   const [reminderCourse, setReminderCourse] = useState<string>('')
-
+  const [editId,setEditId]=useState<string|null>(null)
   
 
   useEffect(() => {
@@ -51,26 +51,40 @@ const findReminder=(id:string)=>{
   
 
 }
-  const addReminder = () => {
-    if (!reminderText){
-alert("Please add a reminder title")
-return;
-    }
-    const newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse }]
-    setReminders(newReminders)
-    localStorage.setItem('reminders', JSON.stringify(newReminders))
-    if (reminderCourse){
-    setCoursePage(reminderCourse)
-    }
+const addorUpdateReminder = () => {
+  if (!reminderText) {
+    alert("Please add a reminder title");
+    return;
+  }
+  let newReminders: typeof reminders; 
+  if (editId) {
+    // Update the existing reminder
+    newReminders = reminders.map(r =>
+      r.id === editId
+        ? { ...r, text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse }
+        : r
+    );
+    setEditId(null);
+  } else {
+    // Add a new reminder
+    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse }];
+  }
 
-    setReminderText('')
-    setReminderDesc('')
-    setReminderDate('')
-    setReminderCourse('')
-  
+  // Update the state and localStorage
+  setReminders(newReminders);
+  localStorage.setItem('reminders', JSON.stringify(newReminders));
 
-  
-}
+  if (reminderCourse) {
+    setCoursePage(reminderCourse);
+  }
+
+  // Clear the input fields
+  setReminderText('');
+  setReminderDesc('');
+  setReminderDate('');
+  setReminderCourse('');
+};
+
 
   const deleteReminder = (id: string) => {
     const newReminders = reminders.filter(reminder=>reminder.id !=id)
@@ -88,7 +102,8 @@ return;
     setReminderDesc(r.desc)
     setReminderDate(r.date)
     setReminderCourse(r.course)
-    deleteReminder(id)
+    setEditId(r.id)
+   
   }
 
   const handleCourseInputChange = (index: number, value: string) => {
@@ -329,9 +344,9 @@ href='/notes'>
        </div>
         <button
           className="bg-blue-500 text-white py-2 px-4 mb-4 mt-4"
-          onClick={addReminder}
+          onClick={addorUpdateReminder}
         >
-          Add Reminder
+          {(editId)? "Edit Reminder":"Add Reminder"}
         </button>
       
         <h2 className="text-xl text-white mb-2">Other Reminders</h2>
