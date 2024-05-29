@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Scholar",
-  description: "A place to manage coursework, reminders, check the weather and store important links",
+  description: "A place for studying. Set reminders, track coursework, take notes, save important links, set goals and track your studying times.",
 };
 
 export default function RootLayout({
