@@ -33,7 +33,7 @@ export default function Home() {
         id:'default',
         text: 'Reminders will show up here',
         date: new Date().toISOString().split('T')[0], // Set today's date as default
-        desc: 'Example reminder description',
+        desc: 'Example reminder details',
         course: ''
       }]);
     } else {
