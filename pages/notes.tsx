@@ -23,9 +23,11 @@ export default function Notes() {
   }
 
   function deleteNote(id: string) {
+   
     const newNotes = notes.filter(note => note.id !== id);
     setNotes(newNotes);
     localStorage.setItem('notes', JSON.stringify(newNotes));
+    
   }
 
   function editNote(id: string) {
@@ -95,7 +97,14 @@ export default function Notes() {
                 <button onClick={() => editNote(id)} className="text-yellow-400 hover:text-yellow-600">
                 <i className="fas fa-edit"></i>
                 </button>
-                <button onClick={() => deleteNote(id)} className="text-red-400 hover:text-red-600">
+                <button
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete this note?')) {
+                    deleteNote(id);
+                  }
+                }}
+                className="text-red-400 hover:text-red-600"
+              >
                 <i className="fas fa-trash"></i>
                 </button>
               </div>

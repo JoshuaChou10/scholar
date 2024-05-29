@@ -209,7 +209,7 @@ href='/notes'>
               src="/note-icon.png"
               alt="Notes"
               width={100} // Set the desired width for the icon
-              height={60} // Set the desired height for the icon
+              height={10} // Set the desired height for the icon
               layout="fixed" // This can be responsive or fill as needed
               className="mr-2" // Margin right for spacing between icon and text
             />
