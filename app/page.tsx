@@ -1,5 +1,6 @@
 'use client'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import Select, { SingleValue, MultiValue } from 'react-select'
 import {StylesConfig} from 'react-select'
@@ -189,16 +190,46 @@ return;
         <LinkSection/>
       </aside>
 
-      <main className="flex-1 p-4">
-        <div className='flex items-center justify-center'>
-          <Image
-            src="/logo.png"
-            alt="Home Logo"
-            width={200} // Set the desired width
-            height={120} // Set the desired height
-            layout="fixed" // This can be responsive or fill as needed
-          />
-        </div>
+      <main className="flex-1 p-4 bg-black min-h-screen text-white">
+      <div className='flex items-center justify-center mb-4'>
+        <Image
+          src="/logo.png"
+          alt="Home Logo"
+          width={200} // Set the desired width
+          height={120} // Set the desired height
+          layout="fixed" // This can be responsive or fill as needed
+        />
+      </div>
+      <div className="flex justify-between items-start mb-4">
+        <div></div> {/* Empty div to push the link to the right */}
+        <Link className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition duration-300 flex items-center"
+href='/notes'>
+        
+            <Image
+              src="/note-icon.png"
+              alt="Notes"
+              width={100} // Set the desired width for the icon
+              height={60} // Set the desired height for the icon
+              layout="fixed" // This can be responsive or fill as needed
+              className="mr-2" // Margin right for spacing between icon and text
+            />
+            <svg
+              className="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+ 
+        </Link>
+      </div>
         <div className="flex justify-between items-start space-x-4">
   <div className="flex-1 flex flex-row">
     <div className="w-1/2">
@@ -282,7 +313,7 @@ return;
         
           type="text"
           className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          placeholder="Reminder Details"
+          placeholder="Reminder Details (Optional)"
           value={reminderDesc}
           onChange={(e) => setReminderDesc(e.target.value)}
         />
