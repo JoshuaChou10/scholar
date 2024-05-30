@@ -85,7 +85,7 @@ export default function Notes() {
   function reset() {
     if(window.confirm("Are you sure you want to reset your study timer?")){
       setSeconds(0);
-      localStorage.setItem('seconds',JSON.stringify(seconds))
+      localStorage.setItem('seconds',JSON.stringify(0))
       setIsActive(false);
     }
 
