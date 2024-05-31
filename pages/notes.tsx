@@ -113,7 +113,7 @@ export default function Notes() {
   return (
     <div className="p-4 bg-black min-h-screen">
       <Head>
-        <title>Scholar - Notes</title>
+        <title>{coursePage} Notes</title>
       </Head>
       <Link className='text-white text-xl flex items-center mb-4' href="/">
         <i className="fas fa-home"></i> 
@@ -127,7 +127,7 @@ export default function Notes() {
           layout="fixed"
         />
       </div>
-      <h2 className="text-white text-2xl mb-4">Notes</h2>
+      <h2 className="text-white text-2xl mb-4">{coursePage} Notes</h2>
       
       <div className="flex justify-center space-x-4 mb-4">
         <button
