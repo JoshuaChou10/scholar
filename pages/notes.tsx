@@ -170,7 +170,7 @@ export default function Notes() {
           onClick={addorUpdateNote}
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
         >
-          {editId ? "Edit Note" : "Add Note"}
+          {editId ? `Edit ${coursePage || ''} Note` : `Add ${coursePage || ''} Note`}
         </button>
       </div>
 
