@@ -47,7 +47,7 @@ export default function ReminderList ({ reminders, editReminder, deleteReminder 
     });
     const sortedReminders=[...sortedRemindersWithDates,...remindersWithoutDates]
     return (
-        <div>
+        <div >
        
             <ul className="list-none p-0">
     
@@ -92,11 +92,12 @@ export default function ReminderList ({ reminders, editReminder, deleteReminder 
             
             {/* Conditionally displayed description below the title and button */}
             {visibleDescriptionIndexes.includes(index) && (
-                <div className="text-blue-500 p-2 mt-2 transition-all duration-300" style={{ maxHeight: (visibleDescriptionIndexes.includes(index)) ? '100px' : '0', overflow: 'hidden' }}>
+      
+                <div className="text-white p-2 mt-2 transition-all duration-300 mb-3" style={{ maxHeight: (visibleDescriptionIndexes.includes(index)) ? '100px' : '0', overflow: 'hidden' }}>
                     {reminder.desc}
-                    <br />
-                    To be completed by: {(reminder.date)? reminder.date:"Whenever you want"}
-                </div>
+                    <p className="text-blue-500">To be completed by: {reminder.date ? new Date(reminder.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : "Whenever you want"}</p>
+
+              </div>
             )}
         </li>
     ))}
