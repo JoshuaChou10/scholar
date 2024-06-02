@@ -5,7 +5,7 @@ import Image from 'next/image';
 import '../app/globals.css';
 
 export default function Notes() {
-  const [notes, setNotes] = useState<{ id: string; title: string; content: string; course: string }[]>([]);
+  const [notes, setNotes] = useState<{ id: string; title: string; content: string; course: string|null }[]>([]);
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [seconds, setSeconds] = useState(0);
@@ -50,10 +50,10 @@ export default function Notes() {
   }, [seconds, goal]);
 
   function addorUpdateNote() {
-    if (!coursePage) {
-      alert('Please select a course to add the note to.');
-      return;
-    }
+    // if (!coursePage) {
+    //   alert('Please select a course to add the note to.');
+    //   return;
+    // }
 
     let newNotes: typeof notes;
     if (editId) {
