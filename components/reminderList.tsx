@@ -11,14 +11,23 @@ interface ReminderListProps {
 
 export default function ReminderList ({ reminders, editReminder, deleteReminder }:ReminderListProps) {
     
+    
     // State to track the visible description; null initially means all are collapsed
-    const [visibleDescriptionIndex, setVisibleDescriptionIndex] = useState<number | null>(null);
+    const [visibleDescriptionIndexes, setVisibleDescriptionIndexes] = useState<number[]>([]);
 
     // Toggle function to show/hide descriptions
     
 
     const toggleDescription = (index: number) => {
-        setVisibleDescriptionIndex(visibleDescriptionIndex === index ? null : index);
+
+        setVisibleDescriptionIndexes(prevIndexes=>{
+            if(prevIndexes?.includes(index)){
+                return prevIndexes.filter(i=>i!=index);
+            }
+            else{
+                return [...prevIndexes,index]
+            }
+        });
     };
     const getDaysUntil = (dateStr: string) => {
         const today = new Date();
@@ -62,7 +71,7 @@ export default function ReminderList ({ reminders, editReminder, deleteReminder 
     </span>
 )}
 
-                    <svg className="fill-current text-white w-4 h-4 ml-2 transform transition-transform duration-300" style={{ transform: visibleDescriptionIndex === index ? 'rotate(180deg)' : 'rotate(0deg)' }} viewBox="0 0 20 20">
+                    <svg className="fill-current text-white w-4 h-4 ml-2 transform transition-transform duration-300" style={{ transform: (visibleDescriptionIndexes.includes(index))? 'rotate(180deg)' : 'rotate(0deg)' }} viewBox="0 0 20 20">
                         <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                     </svg>
                 </div>
@@ -82,8 +91,8 @@ export default function ReminderList ({ reminders, editReminder, deleteReminder 
             </div>
             
             {/* Conditionally displayed description below the title and button */}
-            {visibleDescriptionIndex === index && (
-                <div className="text-blue-500 p-2 mt-2 transition-all duration-300" style={{ maxHeight: visibleDescriptionIndex === index ? '100px' : '0', overflow: 'hidden' }}>
+            {visibleDescriptionIndexes.includes(index) && (
+                <div className="text-blue-500 p-2 mt-2 transition-all duration-300" style={{ maxHeight: (visibleDescriptionIndexes.includes(index)) ? '100px' : '0', overflow: 'hidden' }}>
                     {reminder.desc}
                     <br />
                     To be completed by: {(reminder.date)? reminder.date:"Whenever you want"}
