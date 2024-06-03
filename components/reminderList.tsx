@@ -36,6 +36,10 @@ export default function ReminderList ({ reminders, editReminder, deleteReminder 
         const daysUntil = Math.ceil(timeDiff / (1000 * 3600 * 24));
         return daysUntil;
     };
+    const parseDate = (dateString:string) => {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day); // Month is zero-indexed in JavaScript
+    };
     const remindersWithDates = reminders.filter(reminder => reminder.date);
     const remindersWithoutDates = reminders.filter(reminder => !reminder.date);
     // sort takes comparision function as an argument
@@ -95,8 +99,11 @@ export default function ReminderList ({ reminders, editReminder, deleteReminder 
       
                 <div className="text-white p-2 mt-2 transition-all duration-300 mb-3" style={{ maxHeight: (visibleDescriptionIndexes.includes(index)) ? '100px' : '0', overflow: 'hidden' }}>
                     {reminder.desc}
-                    <p className="text-blue-500">To be completed by: {reminder.date ? new Date(reminder.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : "Whenever you want"}</p>
-
+                    
+                    <p className="text-blue-500">
+                        To be completed by: {reminder.date ? parseDate(reminder.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : "Whenever you want"}
+                    </p>
+                   
               </div>
             )}
         </li>
