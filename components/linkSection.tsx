@@ -1,15 +1,25 @@
 import { useState, useEffect } from 'react';
 
 export default function LinkSection() {
-  const defaultLink = { id: crypto.randomUUID(), title: 'Mindfulness', link: 'https://docs.google.com/document/d/1HM-dE1JrxKOs7_-k9xQteIHOxX5qGCrkBbJ7HUgBqfc/edit?usp=sharing' };
+
   const [links, setLinks] = useState<{ id: string, title: string, link: string }[]>([]);
   const [title, setTitle] = useState<string>('');
   const [link, setLink] = useState<string>('');
 
   useEffect(() => {
-    const savedLinks = JSON.parse(localStorage.getItem('links') || '[]');
-    const mergedLinks = [defaultLink, ...savedLinks.filter((link: { id: string }) => link.id !== defaultLink.id)];
-    setLinks(mergedLinks);
+    const savedLinks = JSON.parse(localStorage.getItem('links') || "[]");
+    // const mergedLinks = [defaultLink, ...savedLinks.filter((link: { id: string }) => link.id !== defaultLink.id)];
+    if (savedLinks.length === 0) {
+      setLinks([{
+        id:'default',
+        title: 'Mindfulness',
+        link: 'https://docs.google.com/document/d/1HM-dE1JrxKOs7_-k9xQteIHOxX5qGCrkBbJ7HUgBqfc/edit?usp=sharing'
+
+      }]);
+    } else {
+      setLinks(savedLinks)
+    }
+
   }, []);
 
   function addLink() {
