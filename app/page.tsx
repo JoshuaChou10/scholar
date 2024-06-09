@@ -8,6 +8,9 @@ import WeatherDisplay from '../components/weather'
 import LinkSection from '../components/linkSection'
 import ReminderList from '../components/reminderList'
 import Image from 'next/image'
+import { Resend } from 'resend';
+
+
 
 
 export default function Home() {
@@ -16,18 +19,31 @@ export default function Home() {
   const [courses, setCourses] = useState<string[]>([])
   const [courseInputs, setCourseInputs] = useState<string[]>(['', '', '', ''])
   const [coursePage, setCoursePage] = useState<string>('Course')
-  const [reminders, setReminders] = useState<{ id:string, text: string; date: string, desc: string, course: string }[]>([])
+  const [reminders, setReminders] = useState<{ id:string, text: string; date: string, desc: string, course: string, sent:boolean }[]>([])
   const [reminderText, setReminderText] = useState<string>('')
   const [reminderDate, setReminderDate] = useState<string>('')
   const [reminderDesc, setReminderDesc] = useState<string>('')
   const [reminderCourse, setReminderCourse] = useState<string>('')
+  const [reminderEmail, setReminderEmail] = useState<string>('');
   const [editId,setEditId]=useState<string|null>(null)
   
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+const [confirmEmail, setConfirmEmail] = useState<string>('');
+const [isEmailReminder, setIsEmailReminder] = useState(false);
+
+  const resend = new Resend('re_4SARM9Jy_KXFda8k9hkKLY5CA7U7kpxxT');
 
   useEffect(() => {
     const today = new Date()
     setCurrentDay((today.getDate() % 2 === 0) ? 2 : 1)
-
+const savedReminderPrefer=localStorage.getItem('isEmailReminder')
+if (savedReminderPrefer=='true'){
+  setIsEmailReminder(true)
+}
+else{
+  setIsEmailReminder(false)
+}
     const savedReminders = JSON.parse(localStorage.getItem('reminders') || "[]")
     if (savedReminders.length === 0) {
       setReminders([{
@@ -35,28 +51,84 @@ export default function Home() {
         text: 'Reminders will show up here',
         date: new Date().toISOString().split('T')[0], // Set today's date as default
         desc: 'Example reminder details',
-        course: ''
+        course: '',
+        sent:true
       }]);
     } else {
       setReminders(savedReminders)
     }
+    //JSON cannot parse empty string, hence the conditional statements
+    const savedEmail = localStorage.getItem('email') || '';
+    setReminderEmail(savedEmail!='' ? JSON.parse(savedEmail) : '');
+    setConfirmEmail(savedEmail!=''? JSON.parse(savedEmail):'')
+    
 
     const savedCourses = JSON.parse(localStorage.getItem('courses') || '[]')
     if (savedCourses.length > 0) {
       setCourses(savedCourses)
     }
+
   }, [])
+
+ useEffect(() => {
+  const today = new Date().toISOString().split('T')[0];
+
+
+  const sendReminders = async () => {
+    for (const reminder of reminders) {
+      if (reminder.date === today && !reminder.sent) {
+        try {
+          await sendEmail(reminderEmail, `${reminder.course} Reminder: ${reminder.text}`, `Details: ${reminder.desc}`);
+          // Mark the reminder as sent
+          reminder.sent=true
+         
+        } catch (error) {
+          console.error("Error sending email:", error);
+        }
+      }
+    }
+    localStorage.setItem('reminders',JSON.stringify(reminders))
+  };
+
+  if (reminderEmail) {
+    sendReminders();
+  }
+}, [reminders, reminderEmail]);
+
+  
+
 const findReminder=(id:string)=>{
   return reminders.find(reminder=>reminder.id==id)
   
 
 }
-const addorUpdateReminder = () => {
+
+const sendEmail = async (to: string, subject: string, text: string) => {
+  try {
+    const response = await fetch('/api/sendEmail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ to, subject, text }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send email');
+    }
+
+    console.log('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+};
+
+const addorUpdateReminder = async () => {
   if (!reminderText) {
     alert("Please add a reminder title");
     return;
   }
-  let newReminders: typeof reminders; 
+  let newReminders: typeof reminders;
   if (editId) {
     // Update the existing reminder
     newReminders = reminders.map(r =>
@@ -67,7 +139,7 @@ const addorUpdateReminder = () => {
     setEditId(null);
   } else {
     // Add a new reminder
-    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse }];
+    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:false }];
   }
 
   // Update the state and localStorage
@@ -83,7 +155,14 @@ const addorUpdateReminder = () => {
   setReminderDesc('');
   setReminderDate('');
   setReminderCourse('');
+  setReminderEmail('');
+
+  // Send email if email is provided
+  // if (reminderEmail) {
+  //   await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
+  // }
 };
+
 
 
   const deleteReminder = (id: string) => {
@@ -245,6 +324,7 @@ href='/notes'>
  
         </Link>
       </div>
+
         <div className="flex justify-between items-start space-x-4">
   <div className="flex-1 flex flex-row">
     <div className="w-1/2">
@@ -290,9 +370,62 @@ href='/notes'>
         </div>
       )}
     </div>
+  
+
+
+    {isModalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg">
+      <h2 className="text-xl mb-4">Set Reminder Email</h2>
+      <input
+        type="email"
+        className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 mb-2"
+        placeholder="Email (Optional)"
+        value={reminderEmail}
+        onChange={(e) => setReminderEmail(e.target.value)}
+      />
+      <input
+        type="email"
+        className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 mb-2"
+        placeholder="Confirm Email"
+        value={confirmEmail}
+        onChange={(e) => setConfirmEmail(e.target.value)}
+      />
+      <button
+        className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+        onClick={() => {
+          if (reminderEmail === confirmEmail) {
+            setIsModalOpen(false);
+            localStorage.setItem('email', JSON.stringify(reminderEmail));
+          } else {
+            alert("Emails do not match");
+          }
+        }}
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+)}
+
 
     <div className="w-1/2 mt-10 mx-3 flex flex-col">
   <h2 className="text-2xl text-white mb-4">{coursePage} Reminders</h2>
+  <label className="inline-flex items-center mt-4">
+  <input
+    type="checkbox"
+    className="form-checkbox h-6 w-6 text-blue-600 transition duration-150 ease-in-out"
+    checked={isEmailReminder}
+    onChange={(e) => {
+      setIsEmailReminder(e.target.checked);
+      localStorage.setItem('isEmailReminder',JSON.stringify(!isEmailReminder))
+      if (e.target.checked) {
+        setIsModalOpen(true);
+      }
+    }}
+  />
+  <span className="ml-2 text-white text-lg font-medium">Enable Email Reminder</span>
+</label>
   <div className="border border-blue-300 bg-gray-900 p-4 rounded-lg shadow-lg flex-grow flex flex-col">
       <ReminderList reminders={getCourseReminders(coursePage)} deleteReminder={deleteReminder} editReminder={editReminder} />
       </div>
