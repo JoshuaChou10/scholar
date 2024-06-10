@@ -124,6 +124,8 @@ const sendEmail = async (to: string, subject: string, text: string) => {
 };
 
 const addorUpdateReminder = async () => {
+  const today = new Date().toISOString().split('T')[0];
+
   if (!reminderText) {
     alert("Please add a reminder title");
     return;
@@ -139,7 +141,15 @@ const addorUpdateReminder = async () => {
     setEditId(null);
   } else {
     // Add a new reminder
-    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:false }];
+    if (reminderEmail && reminderDate==today) {
+      await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
+      newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:true }];
+
+    }
+    else{
+      newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:false }];
+
+    }
   }
 
   // Update the state and localStorage
@@ -157,10 +167,7 @@ const addorUpdateReminder = async () => {
   setReminderCourse('');
 
 
-  // Send email if email is provided
-  // if (reminderEmail) {
-  //   await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
-  // }
+
 };
 
 
