@@ -59,9 +59,9 @@ else{
     }
     //JSON cannot parse empty string, hence the conditional statements
     const savedEmail = localStorage.getItem('email') || '';
-  const parsedEmail = savedEmail !== '' ? JSON.parse(savedEmail) : '';
-  setReminderEmail(parsedEmail);
-  setConfirmEmail(parsedEmail);
+    setReminderEmail(savedEmail!='' ? JSON.parse(savedEmail) : '');
+    setConfirmEmail(savedEmail!=''? JSON.parse(savedEmail):'')
+    
 
     const savedCourses = JSON.parse(localStorage.getItem('courses') || '[]')
     if (savedCourses.length > 0) {
@@ -70,44 +70,30 @@ else{
 
   }, [])
 
-
-
+ useEffect(() => {
+  const today = new Date().toISOString().split('T')[0];
 
 
   const sendReminders = async () => {
-    const today = new Date().toISOString().split('T')[0];
-    const updatedReminders = [];
-  
     for (const reminder of reminders) {
       if (reminder.date === today && !reminder.sent) {
         try {
           await sendEmail(reminderEmail, `${reminder.course} Reminder: ${reminder.text}`, `Details: ${reminder.desc}`);
           // Mark the reminder as sent
-          updatedReminders.push({ ...reminder, sent: true });
+          reminder.sent=true
+         
         } catch (error) {
           console.error("Error sending email:", error);
-          updatedReminders.push(reminder); // Push the original reminder if there's an error
         }
-      } else {
-        updatedReminders.push(reminder); // Push the original reminder if no update is needed
       }
     }
-  
-    // Update the state with the new reminders array
-    setReminders(updatedReminders);
-  
-    // Update localStorage with the new reminders array
-    localStorage.setItem('reminders', JSON.stringify(updatedReminders));
+    localStorage.setItem('reminders',JSON.stringify(reminders))
   };
-  
-  // Call sendReminders when reminderEmail changes
-  useEffect(() => {
-    if (reminderEmail) {
-      sendReminders();
-    }
-  }, [reminderEmail, reminders]);
-  
 
+  if (reminderEmail) {
+    sendReminders();
+  }
+}, [reminders, reminderEmail]);
 
   
 
@@ -153,14 +139,7 @@ const addorUpdateReminder = async () => {
     setEditId(null);
   } else {
     // Add a new reminder
-       if (reminderEmail) {
-    await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
-    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:true}];
-   }
-   else{
     newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:false }];
-
-   }
   }
 
   // Update the state and localStorage
@@ -178,8 +157,10 @@ const addorUpdateReminder = async () => {
   setReminderCourse('');
 
 
-
-
+  // Send email if email is provided
+  // if (reminderEmail) {
+  //   await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
+  // }
 };
 
 
