@@ -153,10 +153,13 @@ const addorUpdateReminder = async () => {
     setEditId(null);
   } else {
     // Add a new reminder
-    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:false }];
        if (reminderEmail) {
     await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
     newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:true}];
+   }
+   else{
+    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:false }];
+
    }
   }
 
