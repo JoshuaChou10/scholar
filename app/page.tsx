@@ -154,6 +154,10 @@ const addorUpdateReminder = async () => {
   } else {
     // Add a new reminder
     newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:false }];
+       if (reminderEmail) {
+    await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
+    newReminders = [...reminders, { id: crypto.randomUUID(), text: reminderText, date: reminderDate, desc: reminderDesc, course: reminderCourse, sent:true}];
+   }
   }
 
   // Update the state and localStorage
@@ -169,12 +173,10 @@ const addorUpdateReminder = async () => {
   setReminderDesc('');
   setReminderDate('');
   setReminderCourse('');
-  setReminderEmail('');
 
-  // Send email if email is provided
-  // if (reminderEmail) {
-  //   await sendEmail(reminderEmail, `${reminderCourse} Reminder: ${reminderText}`, `Details: ${reminderDesc}`);
-  // }
+
+
+
 };
 
 
