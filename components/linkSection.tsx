@@ -12,8 +12,8 @@ export default function LinkSection() {
     if (savedLinks.length === 0) {
       setLinks([{
         id:'default',
-        title: 'Mindfulness',
-        link: 'https://docs.google.com/document/d/1HM-dE1JrxKOs7_-k9xQteIHOxX5qGCrkBbJ7HUgBqfc/edit?usp=sharing'
+        title: 'Tracker App',
+        link: 'https://tracker-six-orpin.vercel.app/'
 
       }]);
     } else {
