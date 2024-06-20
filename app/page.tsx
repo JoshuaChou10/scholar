@@ -418,7 +418,7 @@ href='/notes'>
 
     <div className="w-1/2 mt-10 mx-3 flex flex-col">
   <h2 className="text-2xl text-white mb-4">{coursePage} Reminders</h2>
-  <label className="inline-flex items-center mt-4">
+  {/* <label className="inline-flex items-center mt-4">
   <input
     type="checkbox"
     className="form-checkbox h-6 w-6 text-blue-600 transition duration-150 ease-in-out"
@@ -432,7 +432,7 @@ href='/notes'>
     }}
   />
   <span className="ml-2 text-white text-lg font-medium">Enable Email Reminder</span>
-</label>
+</label> */}
   <div className="border border-blue-300 bg-gray-900 p-4 rounded-lg shadow-lg flex-grow flex flex-col">
       <ReminderList reminders={getCourseReminders(coursePage)} deleteReminder={deleteReminder} editReminder={editReminder} />
       </div>
@@ -464,9 +464,9 @@ href='/notes'>
           value={reminderText}
           onChange={(e) => setReminderText(e.target.value)}
         />
-        <input
+        <textarea
         
-          type="text"
+
           className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
           placeholder="Reminder Details (Optional)"
           value={reminderDesc}
@@ -491,7 +491,11 @@ href='/notes'>
       
         <h2 className="text-xl text-white mb-2">Other Reminders</h2>
         <ReminderList reminders={getOtherReminders()} deleteReminder={deleteReminder} editReminder={editReminder} />
+        <footer className="mt-8 text-center text-gray-500">
+        Made by Joshua Chou © {new Date().getFullYear()}
+      </footer>
       </main>
+      
     </div>
   );
 }

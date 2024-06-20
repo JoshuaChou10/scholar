@@ -158,9 +158,9 @@ export default function Notes() {
           onChange={(e) => setTitle(e.target.value)}
           className="p-2 rounded bg-gray-800 text-white border border-gray-600"
         />
-        <input
+        <textarea
           required
-          type="text"
+
           placeholder="Note content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
